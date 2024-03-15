@@ -5,15 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="theme-color" content="#000000">
 
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-
+    <link rel="manifest" href="/manifest.json">
+    <link rel="shortcut icon" href=/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/index.css" />
     <title>Intercom + Netlify Functions</title>
   </head>
   <body>
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
-    <div id="root"></div>
+      <div className='app'>
+        <div className='app-contents'>
+          <h1>Google + Netlify Functions</h1>
+          <p>Login with Google OAuth</p>
+          <div className='button-wrapper'>
+            <a href="/.netlify/functions/auth">
+              <img
+                      alt='Login with Google'
+                      src="https://static.intercomassets.com/assets/oauth/primary-7edb2ebce84c088063f4b86049747c3a.png"
+                      srcset="
+                        https://static.intercomassets.com/assets/oauth/primary-7edb2ebce84c088063f4b86049747c3a.png 1x,
+                        https://static.intercomassets.com/assets/oauth/primary@2x-0d69ca2141dfdfa0535634610be80994.png 2x,
+                        https://static.intercomassets.com/assets/oauth/primary@3x-788ed3c44d63a6aec3927285e920f542.png 3x
+                      "
+              />
+            </a>
+          </div>
+
+          <a href="https://github.com/rachitpant/intercom-netlify-oauth" className='github-link'>
+            View the source on Github
+          </a>
+        </div>
+      </div>
   </body>
 </html>

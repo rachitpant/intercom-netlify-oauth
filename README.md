@@ -1,6 +1,6 @@
-# Netlify + Intercom OAuth &nbsp;&nbsp;&nbsp;<a href="https://app.netlify.com/start/deploy?repository=https://github.com/davidwells/intercom-netlify-oauth"><img src="https://www.netlify.com/img/deploy/button.svg"></a>
+# Netlify + Google OAuth &nbsp;&nbsp;&nbsp;<a href="https://app.netlify.com/start/deploy?repository=https://github.com/davidwells/intercom-netlify-oauth"><img src="https://www.netlify.com/img/deploy/button.svg"></a>
 
-Add 'login with Intercom' via Netlify Functions & OAuth!
+Add 'login with Google' via Netlify Functions & OAuth!
 
 <!-- AUTO-GENERATED-CONTENT:START (TOC) -->
 - [About the project](#about-the-project)
@@ -14,17 +14,14 @@ Add 'login with Intercom' via Netlify Functions & OAuth!
 
 ## About the project
 
-This project sets up a "login with Intercom" OAuth flow using netlify functions.
+This project sets up a "login with Google" OAuth flow using netlify functions.
+The original code base allowed login with Intercom , its been adapted to login with google . Also I removed react.
 
-Here is a quick demo of the login flow, and the OAuth Access data you get back:
 
-![Intercom oauth demo](https://user-images.githubusercontent.com/532272/42738995-7a8de2a0-8843-11e8-8179-d1865ded82ab.gif)
 
-You can leverage this project to wire up Intercom (or other OAuth providers) login with your application.
+You can leverage this project to wire up google (or other OAuth providers) login with your application, although its best to use a library like Auth.js to login , instead of doing the OAuth dance yourself.
 
-> TLDR; [Watch the 11 minute video](https://www.youtube.com/watch?v=HuIS6jvK8S8) explaining **everything**
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/zErvY08uNM0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+Also note , the server should ideally set the id_token and access_token as http only secure cookies and use that to restrict access to secure endpoings and also set bearer when calling Google apis. This hasn't been done in the project.
 
 ---
 
@@ -35,7 +32,7 @@ Let's get started with how to get setup with the repo and with Intercom.
 1. **Clone down the repository**
 
     ```bash
-    git clone git@github.com:DavidWells/intercom-netlify-oauth.git
+    git clone git@github.com:rachitpant/intercom-netlify-oauth.git
     ```
 
 2. **Install the dependencies**
@@ -44,78 +41,22 @@ Let's get started with how to get setup with the repo and with Intercom.
     npm install
     ```
 
-3. **Create an Intercom OAuth app**
+3. **Create an Google cloud app and get the OAuth credentials**
 
-    Lets go ahead and setup the Intercom app we will need!
+    Once you are done , copy the .env.example file to .env and update with your credentials.
 
-    [Create an Intercom OAuth app here](https://app.intercom.com/developers/)
 
-    You need to enable a 'test' app in your account. It's a tricky to find but you can create a TEST app in your Intercom account under `Settings > General`
-
-    `https://app.intercom.com/a/apps/your-app-id/settings/general`
-
-    ![intercom-test-app-setup](https://user-images.githubusercontent.com/532272/42739711-0ec30506-8851-11e8-8c0a-b4b1d5bd4174.jpg)
-
-    After enabling the test app, you can find it listed in your [intercom developer portal](https://app.intercom.com/developers/).
-
-    We now need to configure the test app.
-
-    Input the live "WEBSITE URL" and "REDIRECT URLS" in the app edit screen.
-
-    ![itercom-oauth-app-settings](https://user-images.githubusercontent.com/532272/42740025-0ea5833c-8856-11e8-827a-369189b951a1.jpg)
-
-    You will want to have your live Netlify site URL and `localhost:3000` setup to handle the redirects for local development.
-
-    If you haven't deployed to Netlify yet, just insert a placeholder URL like `http://my-temp-site.com` but **remember to change this once your Netlify site is live with the correct URL**
-
-    Our demo app has these `REDIRECT URLS` values that are comma separated
-
-    ```bash
-    https://intercom-login-example.netlify.com/.netlify/functions/auth-callback,
-    http://localhost:3000/.netlify/functions/auth-callback
-    ```
-
-    Great we are all configured over here.
-
-4. **Grab your the required config values**
-
-    We need our Intercom app values to configure our function environment variables.
-
-    Navigate back to the main OAuth screen and grab the **App ID**, **Client ID**, and **Client Secret** values. We will need these to run the app locally and when deploying to Netlify.
-
-    ![intercom-config-values](https://user-images.githubusercontent.com/532272/42739965-25d15c26-8855-11e8-925b-105c1fa381f5.jpg)
 
 ## Running the project locally
 
-Because we are using `netlify-lambda` to build & serve functions locally, we can work on this project without needing to redeploy to reflect changes!
-
-We need to set an Intercom app id and OAuth client id + secret in your terminal environment for the functions to connect to your Intercom app.
-
-After creating and configuring your [Intercom OAuth app](https://app.intercom.com/developers/), it's time to plugin the required environment variables into your local terminal session.
-
-On linux/MacOS, run the following command in your terminal:
-
-```bash
-export INTERCOM_APP_ID=INTERCOM_APP_ID
-export INTERCOM_CLIENT_ID=INTERCOM_CLIENT_ID
-export INTERCOM_CLIENT_SECRET=INTERCOM_CLIENT_SECRET
-```
-
-If you are on a window machine, set the environment variable like so:
-
-```bash
-set INTERCOM_APP_ID=INTERCOM_APP_ID
-set INTERCOM_CLIENT_ID=INTERCOM_CLIENT_ID
-set INTERCOM_CLIENT_SECRET=INTERCOM_CLIENT_SECRET
-```
 
 Then run the start command
 
 ```bash
-npm start
+npm run dev
 ```
 
-This will boot up our functions to run locally for development. You can now login via your Intercom application and see the token data returned.
+This will boot up our functions to run locally for development. You can now login via your Google application and see the token data returned.
 
 Making edits to the functions in the `/functions` will hot reload the server and you can iterate on building your custom logic.
 
@@ -123,13 +64,7 @@ Making edits to the functions in the `/functions` will hot reload the server and
 
 Use the one click "deploy to Netlify" button to launch this!
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/davidwells/intercom-netlify-oauth)
-
-Alternatively, you can connect this repo with your Netlify account and add in your values.
-
-In `https://app.netlify.com/sites/YOUR-SITE-SLUG/settings/deploys` add the  `INTERCOM_APP_ID`, `INTERCOM_CLIENT_ID`, and `INTERCOM_CLIENT_SECRET` values to the "Build environment variables" section of settings
-
-![intercom-deploy-settings](https://user-images.githubusercontent.com/532272/42740147-ece388c8-8857-11e8-93af-a1dd721e345a.jpg)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/rachitpant/intercom-netlify-oauth)
 
 After your site is deployed, you should be able to test your Intercom login flow.
 
@@ -196,7 +131,7 @@ The `auth-callback.js` function handles the authorization grant code returned fr
 
 It then calls `oauth2.authorizationCode.getToken` to get a valid `accessToken` from Intercom.
 
-Once you have the valid accessToken, you can store it and make authenticated calls on behalf of the user to the Intercom API.
+Once you have the valid accessToken, you can store it and make authenticated calls on behalf of the user to the Google API.
 
 <!-- AUTO-GENERATED-CONTENT:START (CODE:src=./functions/auth-callback.js&header=/* code from /functions/auth-callback.js */) -->
 <!-- The below code snippet is automatically added from ./functions/auth-callback.js -->

@@ -4,27 +4,29 @@ import { config } from './oauth'
 
 /* Call into https://app.intercom.io/me and return user data */
 export default function getUserData(token) {
-  const postData = querystring.stringify({
-    client_id: config.clientId,
-    client_secret: config.clientSecret,
-    app_id: config.appId
-  })
-
+  // Construct the request options
   const requestOptions = {
-    url: `${config.profilePath}?${postData}`,
-    json: true,
-    auth: {
-      user: token.token.token,
-      pass: '',
-    },
+    url: config.profilePath,
+    method: 'GET',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Accept': 'application/json',
+      Authorization: `Bearer ${token.access_token}`,
+      'Content-Type': 'application/json'
     }
-  }
+  };
 
+  // Make a request using the request wrapper
   return requestWrapper(requestOptions, token)
+      .then(response => {
+        // Resolve with the response data
+        return response.data;
+      })
+      .catch(error => {
+        // Handle error
+        console.error('Error fetching user data:', error);
+        throw error; // Rethrow error for further handling
+      });
 }
+
 
 /* promisify request call */
 function requestWrapper(requestOptions, token) {
